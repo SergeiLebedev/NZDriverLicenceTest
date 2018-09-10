@@ -23,7 +23,7 @@ var map = {
                 {"id":19,"question":"You're coming up to a school crossing and both signs are held out. When can you drive on?","picture":"","answer":"0" ,"variants":["When both the signs have been pulled in","When the sign on the left of the crossing has been pulled in","When the sign on the right of the crossing has been pulled in","When there are no more pedestrians on the crossing"]},
                 {"id":20,"question":"Does the driver of the blue car have to give way?","picture":"20.jpg","answer":"1" ,"variants":["Yes","No"]},
                 {"id":21,"question":"When may you pass on the left at an intersection, if you can do so safely?","picture":"","answer":"2" ,"variants":["When you have the headlights of your vehicle turned on","When the vehicle you are passing is signalling a left turn","When the vehicle you are passing has signalled a right turn","When the vehicle you are passing is exceeding the speed limit"]},
-                {"id":22,"question":"For what purpose can a vehicle can use the flush median strip?","picture":"","answer":"0" ,"variants":["To move into traffic","To pass other vehicles","As an extra lane when it is busy","To drive slowly"]},
+                {"id":22,"question":"For what purpose can a vehicle use the flush median strip?","picture":"","answer":"0" ,"variants":["To move into traffic","To pass other vehicles","As an extra lane when it is busy","To drive slowly"]},
                 {"id":23,"question":"What is the maximum speed you may drive if you have a 'space saver wheel' fitted?","picture":"","answer":"2" ,"variants":["100 km/h","90 km/h","80 km/h. If the space-saver wheel displays a lower speed, then that speed applies","70 km/h"]},
                 {"id":24,"question":"Does the driver of the blue car have to give way?","picture":"24.jpg","answer":"1" ,"variants":["Yes","No"]},
                 {"id":25,"question":"When coming up to a Stop sign, where should you stop?","picture":"","answer":"2" ,"variants":["With your front bumper on the yellow lines","Where you can easily see vehicles coming from your left","Where you can see all vehicles coming from all directions","Where you can easily see vehicles coming from your right"]},
@@ -124,7 +124,7 @@ var map = {
                 {"id":3,"question":"You are the driver of the blue car. Of the four hazards marked, which one is most likely to require you to take urgent action?","picture":"3.jpg","answer":"3","variants":["A - The red van turning left","B - The oncoming red car","C - The grey car ahead of you","D - The green car turning right"],"question_ru":"","variants_ru": ["", "", "", ""]},
                 {"id":4,"question":"You are the driver of the blue car. What must you do?","picture":"4.jpg","answer":"1","variants":["Drive on","Give way to other traffic","Stop first and then drive on"],"question_ru":"","variants_ru": ["", "", ""]},
                 {"id":5,"question":"You must NOT park on the right-hand side of the road. What is the exception to this rule?","picture":"","answer":"3","variants":["In the countryside","Picking up passengers","Delivering packages","In a one-way street"],"question_ru":"","variants_ru": ["", "", "", ""]},
-                {"id":6,"question":"For what purpose can a vehicle can use the flush median strip?","picture":"","answer":"0","variants":["To move into traffic","To pass other vehicles","As an extra lane when it is busy","To drive slowly"],"question_ru":"","variants_ru": ["", "", "", ""]},
+                {"id":6,"question":"For what purpose can a vehicle use the flush median strip?","picture":"","answer":"0","variants":["To move into traffic","To pass other vehicles","As an extra lane when it is busy","To drive slowly"],"question_ru":"","variants_ru": ["", "", "", ""]},
                 {"id":7,"question":"Does the driver of the blue car have to give way?","picture":"7.jpg","answer":"1","variants":["Yes", "No"],"question_ru":"","variants_ru": ["Да", "Нет"]},
                 {"id":8,"question":"What must you do at an intersection controlled by a stop sign?","picture":"","answer":"3","variants":["Stop where you can see all vehicles coming from your right","Slow down and drive on if no vehicles are coming","Give way to all vehicles on your left","Come to a complete stop where you can see vehicles coming from all directions"],"question_ru":"","variants_ru": ["", "", "", ""]},
                 {"id":9,"question":"What is the minimum tread depth required for car tyres?","picture":"","answer":"1","variants":["2.0 mm","1.5 mm","1.0 mm","0.5 mm"],"question_ru":"","variants_ru": ["", "", "", ""]},
@@ -831,37 +831,56 @@ function setup_footer() {
         progress = null;
     }
     if(progress == "null" || progress == null){
-        progress = {"tests":[]};
-        tests.forEach(function (test) {
+        // progress = {"tests":[]};
+        // tests.forEach(function (test) {
+        //     let questions = [];
+        //     test.questions.forEach(function (question) {
+        //         questions.push({"id":question.id,"result":false});
+        //     })
+        //     progress.tests.push({"id":test.id,questions});
+        // });
+        progress = [];
+        $.each(tests,function(index,value){
             let questions = [];
-            test.questions.forEach(function (question) {
-                questions.push({"id":question.id,"result":false});
-            })
-            progress.tests.push({"id":test.id,questions});
+            $.each(tests,function(index,value){
+                questions.push(0);
+            });
+            progress.push(question);
         });
         $.cookie("progress", JSON.stringify(progress));
     }
 
+
     let footer = '<div class="footer">';
     footer = footer + '<div id="select_test">Select test and go!</div>';
-    progress.tests.forEach(function (test) {
-        //footer = footer + '<div class="footer"><button onclick="choose_test('+test.id+')" class="footer_test" id="'+test.id+'"> Test № ' + test.id + '</button>';
-        footer = footer + '<div class="test" id="'+ test.id +'">Test № ' + test.id + '<div id="progressbar'+test.id+'"></div></div>';
-        //style="width: 37%;"
-        //$( "#progressbar" ).progressbar({value: 37});
+    // progress.tests.forEach(function (test) {
+    //     //footer = footer + '<div class="footer"><button onclick="choose_test('+test.id+')" class="footer_test" id="'+test.id+'"> Test № ' + test.id + '</button>';
+    //     footer = footer + '<div class="test" id="'+ test.id +'">Test № ' + test.id + '<div id="progressbar'+test.id+'"></div></div>';
+    //     //style="width: 37%;"
+    //     //$( "#progressbar" ).progressbar({value: 37});
+    // });
+    $.each(tests,function(index,value){
+        footer = footer + '<div class="test" id="'+ (index+1) +'">Test № ' + (index+1) + '<div id="progressbar'+(index+1)+'"></div></div>';
     });
     footer = footer + '</div>';
     $('footer').append(footer);
 
-    progress.tests.forEach(function (test) {
+    // progress.tests.forEach(function (test) {
+    //     let passed = 0;
+    //     test.questions.forEach(function (question) {
+    //
+    //         if(question.result==true){
+    //             passed++;
+    //         }
+    //     });
+    //     $( "#progressbar"+test.id ).progressbar({value: passed*100/test.questions.length});
+    // });
+    $.each(progress,function(index,test){
         let passed = 0;
-        test.questions.forEach(function (question) {
-
-            if(question.result==true){
-                passed++;
-            }
+        $.each(test,function(index,value){
+            passed = passed + value;
         });
-        $( "#progressbar"+test.id ).progressbar({value: passed*100/test.questions.length});
+        $( "#progressbar"+(index+1) ).progressbar({value: passed*100/test.length});
     });
     add_functions_footer()
 }
@@ -925,15 +944,22 @@ function next() {
         }
     }
     if(!number_in_order){
-        let test = progress.tests.find(function (item) {
-            return item.id === current_test
-        });
-        let question = test.questions.find(function (item) {
-            return item.result === false
-        });
+        // let test = progress.tests.find(function (item) {
+        //     return item.id === current_test
+        // });
+        // let question = test.questions.find(function (item) {
+        //     return item.result === false
+        // });
+        let is_unanswered_question = -1;
+        $.each(progress[current_test-1], function (index, value) {
+            if(progress[current_test-1][index]==0){
+                is_unanswered_question = index+1;
+                return false;
+            }
+        })
 
-        if (question!=null) {
-            current_question= question.id;
+        if (is_unanswered_question>0) {
+            current_question= is_unanswered_question;
             remove_content();
             setup_content();
         }else {
@@ -951,13 +977,16 @@ function choose_test(id) {
     remove_content();
     setup_content();
 
-    // при выборе теста, нужно обнулить результаты этого теста
-    let test = progress.tests.find(function (item) {
-        return item.id === current_test
-    });
-
-    test.questions.forEach(function (question) {
-        question.result = false;
+    // // при выборе теста, нужно обнулить результаты этого теста
+    // let test = progress.tests.find(function (item) {
+    //     return item.id === current_test
+    // });
+    //
+    // test.questions.forEach(function (question) {
+    //     question.result = false;
+    // })
+    $.each(progress[current_test-1], function (index, value) {
+        progress[current_test-1][index]=0;
     })
     $.cookie("progress", JSON.stringify(progress));
     remove_footer();
@@ -970,13 +999,14 @@ function clear_progress(){
 }
 
 function update_progress(){
-    let test = progress.tests.find(function (item) {
-        return item.id === current_test
-    });
-    let question = test.questions.find(function (item2) {
-        return item2.id === current_question
-    })
-    question.result = true;
+    // let test = progress.tests.find(function (item) {
+    //     return item.id === current_test
+    // });
+    // let question = test.questions.find(function (item2) {
+    //     return item2.id === current_question
+    // })
+    // question.result = true;
+    progress[current_test-1][current_question-1]=1;
     $.cookie("progress", JSON.stringify(progress));
     remove_footer();
     setup_footer();
