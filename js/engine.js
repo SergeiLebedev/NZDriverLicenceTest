@@ -845,7 +845,7 @@ function setup_footer() {
             $.each(tests,function(index,value){
                 questions.push(0);
             });
-            progress.push(question);
+            progress.push(questions);
         });
         $.cookie("progress", JSON.stringify(progress));
     }
