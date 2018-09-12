@@ -322,8 +322,9 @@ function mix_original_test() {
         });
     });
 
+    let s = new Date().getMilliseconds()/4;
     mixed_test.sort(function () {
-        return Math.floor((Math.random() * mixed_test.length) + 1);
+        return Math.floor((Math.random() * mixed_test.length) + 1) - s;
     });
 }
 
